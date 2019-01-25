@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/MJL7068/Full-Stack-2019-osa3#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4"
   },
   "devDependencies": {
