@@ -16,30 +16,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
 
 app.use(cors())
 
-/*let persons = [
-    {
-        id: 1,
-        name: 'Arto Hellas',
-        number: '045-1236543'
-    },
-    {
-        id: 2,
-        name: 'Arto Järvinen',
-        number: "041-21423123"
-    },
-    {
-        id: 3,
-        name: 'Lea Kutvonen',
-        number: '040-4323234'
-    },
-    {
-        id: 4,
-        name: 'Martti Tienari',
-        number: '09-784232'
-    }
-]
-*/
-
 const generateId = () => {
     return Math.floor(Math.random() * Math.floor(999999))
 }
@@ -55,17 +31,10 @@ app.get('/info', (req,res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    //const id = Number(req.params.id)
     const id = req.params.id
-    //const person = persons.find(p => p.id === id)
     Person.find({_id: id}).then(person => {
         res.json(person)
     })
-    /*if (person) {
-        res.json(person)
-    } else {
-        res.status(404).end()
-    }*/
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -89,19 +58,28 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
-    if (persons.find(p => p.name === body.name)) {
+    /*if (persons.find(p => p.name === body.name)) {
         return res.status(400).json({
             error: 'name must be unique'
         })
-    }
+    }*/
 
-    const person = {
+    /*const person = {
         id: generateId(),
         name: body.name,
         number: body.number,
-    }
+    }*/
 
-    persons = persons.concat(person)
+    //persons = persons.concat(person)
+    const person = new Person({
+        name: body.name,
+        number: body.number,
+      })
+      
+      person.save().then(response => {
+        mongoose.connection.close();
+      })
+
     res.json(person)
 })
 
