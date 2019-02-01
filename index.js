@@ -16,6 +16,18 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
 
 app.use(cors())
 
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message)
+
+    if (error.name === 'CastError' && error.kinf === 'ObjectId') {
+        return res.status(400).send({error: 'malformatted id'})
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
+
 const generateId = () => {
     return Math.floor(Math.random() * Math.floor(999999))
 }
@@ -71,7 +83,7 @@ app.delete('/api/persons/:id', (req, res) => {
       .then(result => {
           response.status(204).end
       })
-      .catch(error => console.log(error.message))
+      .catch(error => next(error))
 })
 
 const PORT = process.env.PORT || 3001
